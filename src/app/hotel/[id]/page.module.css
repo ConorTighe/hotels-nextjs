@@ -1,0 +1,66 @@
+.main {
+  padding: 40px;
+  height: 100vh;
+}
+
+.titleRow {
+  display: flex;
+  align-content: center;
+}
+
+
+.imageRow {
+  display: flex;
+  flex-flow: row wrap;
+  align-content: space-between;
+  justify-content: space-between;
+}
+
+.roomsRow {
+  display: flex;
+  flex-flow: row wrap;
+  align-content: space-between;
+  justify-content: space-between;
+  margin-right: auto;
+}
+
+.addressRow {
+  display: flex;
+  flex-flow: row wrap;
+  align-content: space-between;
+  justify-content: space-between;
+}
+
+.roomList {
+  display: flex;
+  flex-flow: column wrap;
+  align-content: space-between;
+  justify-content: space-between;
+  margin: 20px;
+  margin-left: 0px;
+  height: 100%;
+}
+
+.image {
+  padding-bottom: 24px;
+}
+
+.header {
+  padding-bottom: 24px;
+  margin-right: 12px;
+}
+
+.icon {
+  padding-right: 4px;
+}
+
+.button {
+  padding-right: 4px;
+  height: 50px;
+  margin-left: auto;
+  margin-top: auto;
+  width: 200px;
+  background-color: #4F46E5;
+  color: #ffffff;
+  font-size: 1.2rem;
+}

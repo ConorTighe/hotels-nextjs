@@ -1,0 +1,18 @@
+.hotelContainer {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  border: 5px solid red;
+}
+
+.hotelContainer {
+  max-width: 300px;
+}
+
+.hotelCard:global(.p-card) {
+  width: 365px;
+  height: 400px;
+  margin: 45px;
+}

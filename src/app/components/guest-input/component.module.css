@@ -1,0 +1,12 @@
+.guestInput {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.guestInputText {
+  white-space: nowrap;
+  margin-right: 40px;
+  width: 160px;
+}

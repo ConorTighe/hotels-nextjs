@@ -1,0 +1,24 @@
+.slider {
+  width: 100%;
+  margin: auto;
+  margin-right: 20px;
+  margin-left: 100px;
+}
+
+.priceSlider {
+  max-width: 1300px;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  margin-left: auto;
+  align-items: center;
+}
+
+.priceSliderText {
+  margin-right: 20px;
+  white-space: nowrap;
+}
+
+.dropdown:global(.p-dropdown) {
+  min-width: 200px;
+}

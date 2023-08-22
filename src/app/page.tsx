@@ -1,94 +1,81 @@
-import Image from 'next/image'
-import styles from './page.module.css'
+'use client';
+import { useState } from "react";
+import { Nullable } from "primereact/ts-helpers";
+import { Button } from 'primereact/button';
+import GuestInput from "./components/guest-input";
+import PriceSlider from "./components/price-slider";
+import styles from "./page.module.css";
+import CityDropdown from "./components/city-dropdown";
+import { SliderChangeEvent } from "primereact/slider";
+import HotelList from "./components/hotel-list";
+import { Paginator, PaginatorPageChangeEvent } from "primereact/paginator";
+import { DropdownChangeEvent } from "primereact/dropdown";
+import { ICityDropdown } from "./interfaces/hotels";
+import useHotel from "./hooks/hotels";
+
 
 export default function Home() {
+  const pages = 20;
+  const [guests, setGuests] = useState<number>(0);
+  const [range, setRange] = useState<[number, number]>([0, 100]);
+  const [city, setCity] = useState<ICityDropdown>({ name: "", code: "" });
+  const [first, setFirst] = useState(0);
+  const [last, setLast] = useState(pages);
+  const [rows, setRows] = useState(pages);
+  const { hotels, findRooms } = useHotel();
+
+  const cities = [
+    { name: 'New York', code: 'NY' },
+    { name: 'Rome', code: 'RM' },
+    { name: 'London', code: 'LDN' },
+    { name: 'Madrid', code: 'MAD' },
+    { name: 'Paris', code: 'PRS' }
+  ];
+
+  const handleGuestInput = ({ value }: { value: Nullable<number | null> }) => {
+    if (!value) return;
+    setGuests(value)
+  }
+
+  const handleRangeInput = ({ value }: SliderChangeEvent) => {
+    const newRange = value as [number, number];
+    if (!newRange || !newRange?.length) return;
+    setRange(newRange)
+  }
+
+  const handleCityInput = ({ value }: DropdownChangeEvent) => {
+    if (!value) return;
+    setCity(value)
+  }
+
+  const handleSearchRooms = () => {
+    const data = { city: city.name, guests, minPrice: range[0], maxPrice: range[1] }
+    if (findRooms) findRooms(data);
+  }
+
+  const onPageChange = (event: PaginatorPageChangeEvent) => {
+    setFirst(event.first);
+    setRows(event.rows);
+    setLast(event.first + event.rows);
+  };
+
   return (
     <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
+      <div className={styles.firstRow}>
+        <GuestInput handleGuestInput={handleGuestInput} guests={guests} />
+        <PriceSlider handleRangeInput={handleRangeInput} range={range} />
       </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
+      <div className={styles.secondRow}>
+        <CityDropdown cities={cities} selectedCity={city} handleCityInput={handleCityInput} />
       </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore the Next.js 13 playground.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
+      <div className={styles.thirdRow}>
+        <Button onClick={handleSearchRooms}>Search</Button>
+      </div>
+      <div className={styles.hotelRow}>
+        <HotelList hotels={hotels} first={first} last={last} />
+      </div >
+      <div className={styles.footer}>
+        <Paginator first={first} rows={rows} totalRecords={hotels.length} onPageChange={onPageChange} />
       </div>
     </main>
   )
